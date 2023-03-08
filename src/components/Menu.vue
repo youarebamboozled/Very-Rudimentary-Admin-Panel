@@ -6,13 +6,13 @@
       </div>
       <div class="menu-items-container" ref="menuItemsContainer">
         <div class="menu-items" ref="menuItems">
-          <a href="#" class="menu-item">Home</a>
+          <router-link to="/" class="menu-item" @click="toggleMenu">Home</router-link>
           <a href="#" class="menu-item">About</a>
           <a href="#" class="menu-item">Contact</a>
           <a href="#" class="menu-item">Blog</a>
           <a href="#" class="menu-item">Products</a>
-          <a href="#" class="menu-item">Services</a>
           <a href="#" class="menu-item">FAQ</a>
+          <router-link to="/login" class="menu-item" @click="toggleMenu" id="login">Login</router-link>
         </div>
       </div>
       <div class="menu-toggle" @click="toggleMenu">
@@ -42,7 +42,8 @@ export default {
   data() {
     return {
       isDarkMode: false,
-      isMenuOpen: false
+      isMenuOpen: false,
+      isLoggedIn: false
     };
   },
   methods: {
@@ -66,6 +67,10 @@ export default {
     }
   },
   mounted() {
+    // if localstorage gets updated check again
+    window.addEventListener("storage", () => {
+      this.isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    });
     // logo to server domain
     let logo = document.querySelector(".logo");
     logo.textContent = window.location.hostname;
@@ -78,7 +83,21 @@ export default {
         this.closeMenu();
       }
     });
-
+    // if logged in change login to logout and add event listener
+    window.addEventListener("load", () => {
+      this.isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+      if (this.isLoggedIn) {
+        let login = document.getElementById("login");
+        login.textContent = "Logout";
+        login.addEventListener("click", () => {
+          localStorage.setItem("isLoggedIn", false);
+          this.isLoggedIn = false;
+          // delete token cookie
+          document.cookie = "api_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+          window.location.reload();
+        });
+      }
+    });
   },
 };
 </script>

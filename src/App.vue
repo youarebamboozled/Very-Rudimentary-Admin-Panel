@@ -1,12 +1,14 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
 import Menu from './components/Menu.vue'
+import Home from './components/Dashboard.vue'
+import Login from "./components/Login.vue";
 </script>
 
 <template>
   <Menu />
   <div id="container" class="container">
-    <HelloWorld msg="Welcome to Your Vue.js + Vite App" />
+    <router-view />
   </div>
 </template>
 
@@ -14,28 +16,38 @@ import Menu from './components/Menu.vue'
 <script>
 import {router} from "./main.js";
 
-let $cookies;
+function isCookieValid(cookieName) {
+  let cookie = document.cookie.split(';').find(row => row.trim().startsWith(cookieName + '='));
+  return !!cookie;
+}
+
+
 export default {
   name: 'App',
   components: {
-    HelloWorld,
-    Menu
+    Home,
+    Login,
   },
 
   mounted() {
-    // check if on login page if not and cookie is not use router to redirect to login page
-    console.log(window.location.pathname)
-    if (window.location.pathname !== '/login') {
-      if (true) {
-        router.push('/login')
+    // if window location changes check again
+    router.afterEach((to, from) => {
+      if (window.location.pathname !== '/login') {
+        if (isCookieValid("api_token") === false) {
+          router.push('/login')
+        }
       }
-    }
+    });
+
   }
 }
 </script>
 
 <style scoped>
 .container {
-  margin-top: 5%;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 20px;
 }
 </style>

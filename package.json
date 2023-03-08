@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "progressbar.js": "^1.1.0",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   },

@@ -5,7 +5,7 @@ import {createRouter, createWebHistory} from "vue-router";
 import Login from "./components/Login.vue";
 import Home from "./components/Dashboard.vue";
 
-export const IP = 'http://localhost:8080'
+export const IP = 'http://192.168.0.240:8000'
 
 
 export const router = createRouter({

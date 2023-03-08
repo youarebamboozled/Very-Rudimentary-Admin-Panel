@@ -34,7 +34,7 @@ export default {
     router.afterEach((to, from) => {
       if (window.location.pathname !== '/login') {
         if (isCookieValid("api_token") === false) {
-          router.push('/login')
+          //router.push('/login') // TODO: redirect to login page
         }
       }
     });
